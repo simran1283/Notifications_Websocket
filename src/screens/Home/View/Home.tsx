@@ -7,6 +7,7 @@ import useHome from "../ViewModel/Home"
 import { useEffect, useState } from "react"
 import { vs } from "react-native-size-matters"
 import NotificationCard from "../../../components/NotificationCard/View/NotificationCard"
+import { Notification } from "../Model/HomeProps"
 
 
 
@@ -14,9 +15,9 @@ const Home = () => {
 
     const { connected, setConnected, notification, setNotification,
         connectWebSocket, disConnectWebSocket, connectionStatus,
-        wsRef, counts, total, readCount, unreadCount, incrementRead, decrementUnread } = useHome()
+        wsRef, counts, total, readCount, unreadCount, handleDismiss, handleMarkAsRead } = useHome()
 
-    const [current, setCurrent] = useState(null);
+    const [current, setCurrent] = useState<Notification | null>(null);
 
     useEffect(() => {
         if (connected === true) {
@@ -78,8 +79,8 @@ const Home = () => {
                         message={current.message}
                         timestamp={current.timestamp.substring(12, 16)}
                         badge={current.priority || current.error_code || current.completion_time}
-                        incrementRead={incrementRead}
-                        decrementUnread={decrementUnread}
+                        markAsRead = {handleMarkAsRead}
+                        dismiss = {handleDismiss}
                     />
                 </View>
             )}

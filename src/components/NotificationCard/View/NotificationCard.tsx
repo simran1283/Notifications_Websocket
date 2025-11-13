@@ -3,12 +3,15 @@ import AppText from "../../AppText/View/AppText"
 import { vs } from "react-native-size-matters"
 import Animated, { LightSpeedInRight, LightSpeedOutLeft } from "react-native-reanimated"
 import { NotificationCardProps, typeStyles } from "../Model/NotificationCardProps"
+import { useRef } from "react"
 
 
 
-const NotificationCard: React.FC<NotificationCardProps> = ({ type, title, message, timestamp, badge, incrementRead, decrementUnread }) => {
+const NotificationCard: React.FC<NotificationCardProps> = ({ type, title, message, timestamp, badge, markAsRead, dismiss }) => {
 
     const styleByType = typeStyles[type] ?? typeStyles["info"]
+
+    
 
     return (
         <Animated.View entering={LightSpeedInRight} exiting={LightSpeedOutLeft} style={[styles.container, { backgroundColor: styleByType.bg, borderLeftColor: styleByType.border }]}>
@@ -22,13 +25,12 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ type, title, messag
             <AppText title={message} style={styles.title} />
             <View style={styles.bttnContainer}>
                 <TouchableOpacity onPress={() => {
-                    incrementRead()
-                    decrementUnread()
+                   markAsRead()
                 }}>
                     <AppText title="Mark as Read" style={styles.markReadBttn} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                    decrementUnread()
+                   dismiss()
                 }}>
                     <AppText title="Dismiss" style={styles.dismissBttn} />
                 </TouchableOpacity>

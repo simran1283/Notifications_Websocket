@@ -1,13 +1,15 @@
 import { useRef, useState } from "react";
-import { Alert, PushNotification, TouchableHighlight } from "react-native";
-import NotificationCard from "../../../components/NotificationCard/View/NotificationCard";
+import { Alert } from "react-native";
+import { Notification } from "../Model/HomeProps";
+
 
 const useHome = () => {
 
     const [connected, setConnected] = useState(false); // manually connect/disconnect to Websocket
-    const [notification, setNotification] = useState<Array<Object>>([]); // notification Data
+    const [notification, setNotification] = useState<Notification[]>([]); // notification Data
     const [connectionStatus, setConnectionStatus] = useState("Disconnected") //connection status
     const wsRef = useRef<WebSocket | null>(null) // websocket connection reference
+    const actionTriggered = useRef(false) // mark as read / dismiss buttons ref
     const [counts, setCounts] = useState({
         "info": 0,
         "warning": 0,
@@ -15,6 +17,8 @@ const useHome = () => {
         "success": 0
     })
     const [total, setTotal] = useState(0)
+    const [readCount, setReadCount] = useState(0)
+    const [unreadCount, setUnreadCount] = useState(0)
 
 
     const incrementCounts = (type: string) => {
@@ -27,9 +31,7 @@ const useHome = () => {
     const incrementTotal = () => {
         setTotal((prev) => prev + 1)
     }
-    const [readCount, setReadCount] = useState(0)
-    const [unreadCount, setUnreadCount] = useState(0)
-
+    
     const incrementRead = () => {
         setReadCount((prev) => prev + 1)
     }
@@ -137,6 +139,23 @@ const useHome = () => {
 
     }
 
+
+
+    const handleMarkAsRead = () => {
+        if (actionTriggered.current) return
+        actionTriggered.current = true
+
+        incrementRead()
+        decrementUnread()
+    }
+
+    const handleDismiss = () => {
+        if (actionTriggered.current) return
+        actionTriggered.current = true
+
+        decrementUnread()
+    }
+
     //handling manual disconnection from websocket
     const disConnectWebSocket = () => {
         const ws = wsRef.current
@@ -160,7 +179,9 @@ const useHome = () => {
         readCount,
         unreadCount,
         connectWebSocket,
-        disConnectWebSocket
+        disConnectWebSocket,
+        handleDismiss,
+        handleMarkAsRead
     };
 }
 
