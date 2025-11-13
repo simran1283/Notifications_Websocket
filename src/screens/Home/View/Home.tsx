@@ -15,7 +15,7 @@ const Home = () => {
 
     const { connected, setConnected, notification, setNotification,
         connectWebSocket, disConnectWebSocket, connectionStatus,
-        wsRef, counts, total, readCount, unreadCount, handleDismiss, handleMarkAsRead } = useHome()
+        wsRef, counts, total, readCount, unreadCount,incrementRead, decrementUnread } = useHome()
 
     const [current, setCurrent] = useState<Notification | null>(null);
 
@@ -79,8 +79,8 @@ const Home = () => {
                         message={current.message}
                         timestamp={current.timestamp.substring(12, 16)}
                         badge={current.priority || current.error_code || current.completion_time}
-                        markAsRead = {handleMarkAsRead}
-                        dismiss = {handleDismiss}
+                        incrementRead = {incrementRead}
+                        decrementUnread = {decrementUnread}
                     />
                 </View>
             )}

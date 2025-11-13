@@ -5,8 +5,8 @@ export interface NotificationCardProps {
     message: string,
     timestamp: string,
     badge?: string,
-    markAsRead : () => void
-    dismiss : () => void
+    incrementRead : () => void
+    decrementUnread : () => void
 }
 
 export const typeStyles: Record<string, { bg: string; border: string }> = {

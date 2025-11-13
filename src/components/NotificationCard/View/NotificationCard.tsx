@@ -7,11 +7,25 @@ import { useRef } from "react"
 
 
 
-const NotificationCard: React.FC<NotificationCardProps> = ({ type, title, message, timestamp, badge, markAsRead, dismiss }) => {
+const NotificationCard: React.FC<NotificationCardProps> = ({ type, title, message, timestamp, badge, incrementRead, decrementUnread }) => {
 
     const styleByType = typeStyles[type] ?? typeStyles["info"]
 
-    
+    const actionTriggered = useRef(false) // mark as read / dismiss buttons ref
+    const handleMarkAsRead = () => {
+        if (actionTriggered.current) return
+        actionTriggered.current = true
+
+        incrementRead()
+        decrementUnread()
+    }
+
+    const handleDismiss = () => {
+        if (actionTriggered.current) return
+        actionTriggered.current = true
+
+        decrementUnread()
+    }
 
     return (
         <Animated.View entering={LightSpeedInRight} exiting={LightSpeedOutLeft} style={[styles.container, { backgroundColor: styleByType.bg, borderLeftColor: styleByType.border }]}>
@@ -25,12 +39,12 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ type, title, messag
             <AppText title={message} style={styles.title} />
             <View style={styles.bttnContainer}>
                 <TouchableOpacity onPress={() => {
-                   markAsRead()
+                   handleMarkAsRead()
                 }}>
                     <AppText title="Mark as Read" style={styles.markReadBttn} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
-                   dismiss()
+                    handleDismiss()
                 }}>
                     <AppText title="Dismiss" style={styles.dismissBttn} />
                 </TouchableOpacity>

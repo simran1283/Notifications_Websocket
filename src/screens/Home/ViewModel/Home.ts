@@ -9,7 +9,6 @@ const useHome = () => {
     const [notification, setNotification] = useState<Notification[]>([]); // notification Data
     const [connectionStatus, setConnectionStatus] = useState("Disconnected") //connection status
     const wsRef = useRef<WebSocket | null>(null) // websocket connection reference
-    const actionTriggered = useRef(false) // mark as read / dismiss buttons ref
     const [counts, setCounts] = useState({
         "info": 0,
         "warning": 0,
@@ -141,20 +140,6 @@ const useHome = () => {
 
 
 
-    const handleMarkAsRead = () => {
-        if (actionTriggered.current) return
-        actionTriggered.current = true
-
-        incrementRead()
-        decrementUnread()
-    }
-
-    const handleDismiss = () => {
-        if (actionTriggered.current) return
-        actionTriggered.current = true
-
-        decrementUnread()
-    }
 
     //handling manual disconnection from websocket
     const disConnectWebSocket = () => {
@@ -180,8 +165,6 @@ const useHome = () => {
         unreadCount,
         connectWebSocket,
         disConnectWebSocket,
-        handleDismiss,
-        handleMarkAsRead
     };
 }
 
